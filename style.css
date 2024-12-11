@@ -37,10 +37,6 @@ h1 {
     transition: transform 0.6s;
 }
 
-.card:hover .card-inner {
-    transform: rotateY(180deg);
-}
-
 .card-front,
 .card-back {
     position: absolute;
@@ -53,6 +49,7 @@ h1 {
     border-radius: 8px;
     font-size: 24px;
     font-weight: bold;
+    color: #fff;
 }
 
 .card-back {
@@ -65,4 +62,12 @@ h1 {
     color: #2e3b4e;
     transform: rotateY(180deg);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-inner.rotated .card-front {
+    transform: rotateY(0deg);
+}
+
+.card-inner.rotated .card-back {
+    transform: rotateY(180deg);
 }
