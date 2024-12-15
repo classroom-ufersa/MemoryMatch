@@ -44,32 +44,54 @@ const respostas = [
     "Para adicionar um elemento, você usa a operação de enfileirar, que coloca o elemento no final da fila."
 ];
 
-const cards = document.querySelectorAll('.card');
-let flippedCards = [];
+const memoryGameContainer = document.querySelector('.memory-game');
 
-function flipCard() {
-    if (flippedCards.length === 2) return;
+// Função para criar as cartas
+function createCards() {
+    const cardsArray = [];
 
-    const cardInner = this.querySelector('.card-inner');
-    cardInner.classList.add('rotated');  
-    flippedCards.push(this);
+    // Criando as cartas de "?"
+    perguntas.forEach((pergunta, index) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.setAttribute('data-id', index);  // Atribuindo o índice à carta
 
-    if (flippedCards.length === 2) {
-        setTimeout(checkMatch, 1000);
+        // Adicionando o "?" nas cartas de perguntas
+        card.innerText = "?";
+
+        // Adicionando evento de clique para expandir
+        card.addEventListener('click', () => expandCard(card));
+
+        cardsArray.push(card);
+    });
+
+    // Criar pares de cartas com perguntas e respostas
+    const allCards = [...cardsArray, ...cardsArray];
+
+    // Embaralhando as cartas
+    shuffleCards(allCards);
+
+    // Adicionando as cartas ao contêiner
+    allCards.forEach(card => memoryGameContainer.appendChild(card));
+}
+
+// Função para embaralhar as cartas
+function shuffleCards(cards) {
+    for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
     }
 }
 
-function checkMatch() {
-    const [firstCard, secondCard] = flippedCards;
+// Função que lida com a expansão da carta
+function expandCard(card) {
+    const cardId = card.getAttribute('data-id');
+    const correspondingCard = document.querySelector(`.card[data-id='${cardId}']`);
 
-    if (firstCard.querySelector('.card-front').textContent !== secondCard.querySelector('.card-front').textContent) {
-        firstCard.querySelector('.card-inner').classList.remove('rotated');
-        secondCard.querySelector('.card-inner').classList.remove('rotated');
+    if (card.innerText === "?") {
+        card.innerText = respostas[cardId];  // Revela a resposta
     }
-
-    flippedCards = [];
 }
 
-cards.forEach(card => {
-    card.addEventListener('click', flipCard);
-});
+// Criar as cartas na inicialização
+createCards();
