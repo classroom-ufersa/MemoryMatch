@@ -36,10 +36,10 @@ const respostas = [
     "Para adicionar um elemento, você usa a operação de enfileirar, que coloca o elemento no final da fila."
 ];
 
-function createCards(){
+function createCards() {
     const cardsArray = [];
 
-    for(let i = 0; i < perguntas.length; i++){
+    for (let i = 0; i < perguntas.length; i++) {
         const card = document.createElement('div');
         card.classList.add('card');
         card.setAttribute('data-index', i);
@@ -67,8 +67,8 @@ function shuffleCards(cardsArray) {
 
     const container = document.querySelector('.memory-game');
     cardsArray.forEach(card => {
-        container.appendChild(card);  
         card.addEventListener('click', () => cardClick(card));
+        container.appendChild(card);  
     });
 }
 
@@ -77,31 +77,96 @@ createCards();
 let firstCard = null;
 let secondCard = null;
 let cardLocked = false;
+let indexCard1 = null;
+let indexCard2 = null;
+const leftCard = document.querySelector('.expanded-card.left');
+const rightCard = document.querySelector('.expanded-card.right');
+
 
 function cardClick(card) {
     if (cardLocked || card === firstCard || card === secondCard) {
         return;
     }
 
-
     if (!firstCard) {
         firstCard = card;
-        firstCard.style.backgroundColor = 'red';
+        firstCard.style.backgroundColor = 'green';
     }
     else if (!secondCard) {
         secondCard = card;
         secondCard.style.backgroundColor = 'red';
-
         cardLocked = true;
 
         setTimeout(() => {
+            secondCard.style.opacity = '0';
+            firstCard.style.opacity = '0';
+            secondCard.style.pointerEvents = 'none';
+            firstCard.style.pointerEvents = 'none';
+            leftCard.style.display = 'block';
+            rightCard.style.display = 'block';
+            let indexCard1 = firstCard.getAttribute('data-index');
+            let indexCard2 = secondCard.getAttribute('data-index');
 
+            if (indexCard1 >= perguntas.length) {
+                leftCard.innerText = respostas[indexCard1 - perguntas.length];
 
+                console.log(indexCard1 - perguntas.length);
+            }
+            else {
+                leftCard.innerText = perguntas[indexCard1];
+                console.log(indexCard1);
+            }
 
+            if (indexCard2 >= perguntas.length) {
+                rightCard.innerText = respostas[indexCard2 - perguntas.length];
+                console.log(indexCard2 - perguntas.length);
+            }
+            else {
+                rightCard.innerText = perguntas[indexCard2];
+                console.log(indexCard2);
+            }
+
+            
+        }, 500);
+
+        setTimeout(() => {
+            let indexCard1 = firstCard.getAttribute('data-index');
+            let indexCard2 = secondCard.getAttribute('data-index');
+
+            if (indexCard1 >= perguntas.length && indexCard2 < perguntas.length) {
+                if (indexCard1 - perguntas.length == indexCard2) {
+                    firstCard.style.opacity = '0';  
+                    secondCard.style.opacity = '0';  
+
+                }
+                else {
+                    resetCards(); 
+                }
+            } else if (indexCard2 >= perguntas.length && indexCard1 < perguntas.length) {
+                if (indexCard2 - perguntas.length == indexCard1) {
+                    firstCard.style.opacity = '0';  
+                    secondCard.style.opacity = '0'; 
+                }
+                else {
+                    resetCards();
+                }
+            } else {
+                resetCards();
+            }
             firstCard = null;
             secondCard = null;
-
-            cardLocked = false;  
-        }, 1000);  
+            leftCard.style.display = 'none';
+            rightCard.style.display = 'none';
+            cardLocked = false; 
+        }, 10000);
     }
+}
+
+function resetCards() {
+    secondCard.style.opacity = '1';
+    firstCard.style.opacity = '1';
+    secondCard.style.pointerEvents = 'auto';
+    firstCard.style.pointerEvents = 'auto';
+    firstCard.style.backgroundColor = '#2e3d49';
+    secondCard.style.backgroundColor = '#2e3d49';
 }

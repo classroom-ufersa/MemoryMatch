@@ -30,3 +30,46 @@ h1 {
     color: #fff;
     line-height: 100px;
 }
+
+.expanded-card {
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
+    border-radius: 12px;
+    display: none;
+    padding: 20px; 
+    box-sizing: border-box; 
+    font-family: 'Arial', sans-serif; 
+    text-align: center;
+}
+
+.expanded-card p {
+    font-size: 24px; 
+    color: #ffffff; 
+    line-height: 1.5; 
+    font-weight: bold;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    height: 100%; 
+    word-wrap: break-word; 
+}
+
+
+.expanded-card.left {
+    background-color: green;
+    left: 40%;
+    transform: translateY(-50%) translateX(-100%);
+}
+
+
+.expanded-card.right {
+    background-color: red;
+    right: 40%; 
+    transform: translateY(-50%) translateX(100%);
+}
