@@ -44,14 +44,13 @@ function createCards(){
         card.classList.add('card');
         card.setAttribute('data-index', i);
         card.innerText = "?";
-        card.addEventListener('click', () => cardClick(card));
 
         cardsArray.push(card);
         const card2 = document.createElement('div');
         card2.classList.add('card');
         card2.setAttribute('data-index', i + perguntas.length);
         card2.innerText = "?";
-        card2.addEventListener('click', () => cardClick(card));
+
 
 
         cardsArray.push(card2);
@@ -68,12 +67,41 @@ function shuffleCards(cardsArray) {
 
     const container = document.querySelector('.memory-game');
     cardsArray.forEach(card => {
-        container.appendChild(card); 
+        container.appendChild(card);  
+        card.addEventListener('click', () => cardClick(card));
     });
 }
 
 createCards();
 
-function cardClick(card){
-    console.log(card.getAttribute('data-index'));
+let firstCard = null;
+let secondCard = null;
+let cardLocked = false;
+
+function cardClick(card) {
+    if (cardLocked || card === firstCard || card === secondCard) {
+        return;
+    }
+
+
+    if (!firstCard) {
+        firstCard = card;
+        firstCard.style.backgroundColor = 'red';
+    }
+    else if (!secondCard) {
+        secondCard = card;
+        secondCard.style.backgroundColor = 'red';
+
+        cardLocked = true;
+
+        setTimeout(() => {
+
+
+
+            firstCard = null;
+            secondCard = null;
+
+            cardLocked = false;  
+        }, 1000);  
+    }
 }
