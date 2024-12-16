@@ -1,8 +1,4 @@
 const perguntas = [
-    "Qual a complexidade da inserção de um novo nó no início de uma lista encadeada simples?",
-    "Qual é a desvantagem de listas encadeadas em comparação a arrays?",
-    "Como se pode verificar se uma lista encadeada está vazia?",
-    "Quais são as principais características das listas encadeadas?",
     "Quantos ponteiros existem em cada nó de uma lista encadeada simples?",
     "Quais são as principais vantagens das listas encadeadas em relação a arrays?",
     "Qual é o custo de acessar o último elemento em uma lista encadeada simples?",
@@ -22,10 +18,6 @@ const perguntas = [
 ];
 
 const respostas = [
-    "A complexidade é O(1), pois tem um custo constante de tempo.",
-    "Elas consomem mais memória devido aos ponteiros adicionais em cada nó.",
-    "Uma lista encadeada é considerada vazia se o ponteiro 'head' for nulo (null).",
-    "Estrutura de dados dinâmica, composta por nós que armazenam dados e ponteiros para os próximos nós.",
     "Existe um total de 1 ponteiro em cada nó.",
     "Permitem inserções e remoções dinâmicas sem realocação de memória.",
     "O custo é linear (O(n)), pois é necessário percorrer a lista do início até o final.",
@@ -44,54 +36,44 @@ const respostas = [
     "Para adicionar um elemento, você usa a operação de enfileirar, que coloca o elemento no final da fila."
 ];
 
-const memoryGameContainer = document.querySelector('.memory-game');
-
-// Função para criar as cartas
-function createCards() {
+function createCards(){
     const cardsArray = [];
 
-    // Criando as cartas de "?"
-    perguntas.forEach((pergunta, index) => {
+    for(let i = 0; i < perguntas.length; i++){
         const card = document.createElement('div');
         card.classList.add('card');
-        card.setAttribute('data-id', index);  // Atribuindo o índice à carta
-
-        // Adicionando o "?" nas cartas de perguntas
+        card.setAttribute('data-index', i);
         card.innerText = "?";
-
-        // Adicionando evento de clique para expandir
-        card.addEventListener('click', () => expandCard(card));
+        card.addEventListener('click', () => cardClick(card));
 
         cardsArray.push(card);
+        const card2 = document.createElement('div');
+        card2.classList.add('card');
+        card2.setAttribute('data-index', i + perguntas.length);
+        card2.innerText = "?";
+        card2.addEventListener('click', () => cardClick(card));
+
+
+        cardsArray.push(card2);
+    }
+
+    shuffleCards(cardsArray);
+}
+
+function shuffleCards(cardsArray) {
+    for (let i = cardsArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));  
+        [cardsArray[i], cardsArray[j]] = [cardsArray[j], cardsArray[i]];  
+    }
+
+    const container = document.querySelector('.memory-game');
+    cardsArray.forEach(card => {
+        container.appendChild(card); 
     });
-
-    // Criar pares de cartas com perguntas e respostas
-    const allCards = [...cardsArray, ...cardsArray];
-
-    // Embaralhando as cartas
-    shuffleCards(allCards);
-
-    // Adicionando as cartas ao contêiner
-    allCards.forEach(card => memoryGameContainer.appendChild(card));
 }
 
-// Função para embaralhar as cartas
-function shuffleCards(cards) {
-    for (let i = cards.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [cards[i], cards[j]] = [cards[j], cards[i]];
-    }
-}
-
-// Função que lida com a expansão da carta
-function expandCard(card) {
-    const cardId = card.getAttribute('data-id');
-    const correspondingCard = document.querySelector(`.card[data-id='${cardId}']`);
-
-    if (card.innerText === "?") {
-        card.innerText = respostas[cardId];  // Revela a resposta
-    }
-}
-
-// Criar as cartas na inicialização
 createCards();
+
+function cardClick(card){
+    console.log(card.getAttribute('data-index'));
+}
